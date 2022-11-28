@@ -53,7 +53,6 @@ class PostViewHolder(
             Glide.with(binding.avatar)
                 .load(url)
                 .transform(CircleCrop())
-    //            .transform(RoundedCorners(90))
                 .placeholder(R.drawable.ic_baseline_rotate_right_24)
                 .error(R.drawable.ic_baseline_error_24)
                 .timeout(10_000)
