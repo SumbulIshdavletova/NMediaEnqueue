@@ -134,4 +134,8 @@ class PostRepositoryImpl : PostRepository {
                 }
             })
     }
+
+    override fun getAvatarAsync(callback: PostRepository.GetAllCallback<List<Post>>) {
+
+    }
 }
