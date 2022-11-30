@@ -9,7 +9,6 @@ interface PostRepository {
     fun unlikeByIdAsync(id: Long, callback: GetAllCallback<Post>)
     fun saveAsync(post: Post, callback: GetAllCallback<Post>)
     fun removeByIdAsync(id: Long, callback: GetAllCallback<Unit>)
-    fun getAvatarAsync(callback: GetAllCallback<List<Post>>)
 
     interface GetAllCallback<T> {
         fun onSuccess(value: T) {}

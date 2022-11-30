@@ -3,11 +3,12 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import androidx.lifecycle.*
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.*
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.io.IOException
-import kotlin.concurrent.thread
+import ru.netology.nmedia.entity.Image
+
 
 private val empty = Post(
     id = 0,
@@ -16,7 +17,8 @@ private val empty = Post(
     authorAvatar = "",
     likedByMe = false,
     likes = 0,
-    published = ""
+    published = "",
+    attachment = Image(url="", "",AttachmentType.IMAGE)
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {

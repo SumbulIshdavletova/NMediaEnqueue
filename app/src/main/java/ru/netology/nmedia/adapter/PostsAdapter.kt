@@ -47,9 +47,7 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             val name = post.authorAvatar
-
             val url = "http://10.0.2.2:9999/avatars/${name}"
-
             Glide.with(binding.avatar)
                 .load(url)
                 .transform(CircleCrop())
@@ -57,6 +55,17 @@ class PostViewHolder(
                 .error(R.drawable.ic_baseline_error_24)
                 .timeout(10_000)
                 .into(avatar)
+
+            if (post.attachment!=null) {
+                val name2 = post.attachment.url
+                val url2 = "http://10.0.2.2:9999/images/${name2}"
+                Glide.with(binding.attachment)
+                    .load(url2)
+                    .placeholder(R.drawable.ic_baseline_rotate_right_24)
+                    .error(R.drawable.ic_baseline_error_24)
+                    .timeout(10_000)
+                    .into(binding.attachment)
+            }
 
             content.text = post.content
             like.isChecked = post.likedByMe

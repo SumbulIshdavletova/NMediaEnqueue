@@ -1,5 +1,7 @@
 package ru.netology.nmedia.dto
 
+import ru.netology.nmedia.entity.Image
+
 data class Post(
     val id: Long,
     val author: String,
@@ -8,5 +10,7 @@ data class Post(
     val published: String,
     val likedByMe: Boolean,
     val likes: Int = 0,
+    val attachment: Image?,
 )
+
 
