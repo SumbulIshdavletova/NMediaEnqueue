@@ -8,4 +8,7 @@ data class FeedModel(
     val error: Boolean = false,
     val empty: Boolean = false,
     val refreshing: Boolean = false,
+    val likeError: Boolean = false,
+    val saveError: Boolean = false,
+    val removeError: Boolean = false
 )

@@ -64,6 +64,9 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
+            binding.likeErrorGroup.isVisible = state.likeError
+            binding.removeErrorGroup.isVisible = state.removeError
+            binding.saveErrorGroup.isVisible = state.saveError
         }
 
         binding.retryButton.setOnClickListener {
