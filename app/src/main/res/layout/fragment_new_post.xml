@@ -32,4 +32,13 @@
         app:layout_anchor="@id/bottomAppBar"
         />
 
+    <TextView
+        android:id="@+id/saveErrorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_error_loading"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:layout_gravity="center"
+        />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

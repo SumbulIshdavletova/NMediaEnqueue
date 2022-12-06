@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.RoundedCorner
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +56,8 @@ class PostViewHolder(
                 .error(R.drawable.ic_baseline_error_24)
                 .timeout(10_000)
                 .into(avatar)
+
+            attachment.isVisible = post.attachment!=null && post.attachment.url.isNotEmpty()
 
             if (post.attachment!=null) {
                 val name2 = post.attachment.url

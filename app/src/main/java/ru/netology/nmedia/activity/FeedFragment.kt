@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -59,14 +60,32 @@ class FeedFragment : Fragment() {
 
 
         binding.list.adapter = adapter
+
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
-            binding.likeErrorGroup.isVisible = state.likeError
-            binding.removeErrorGroup.isVisible = state.removeError
-            binding.saveErrorGroup.isVisible = state.saveError
+
+            if (state.removeError) {
+                context?.let {
+                    view?.let { it1 ->
+                        Snackbar.make(it, it1, "Remove error", Snackbar.LENGTH_LONG)
+                            .show()
+                            viewModel.loadPosts()
+                    }
+                }
+            }
+            if (state.likeError) {
+                context?.let {
+                    view?.let { it1 ->
+                        Snackbar.make(it, it1, "Like error", Snackbar.LENGTH_LONG)
+                            .show()
+                       viewModel.loadPosts()
+                    }
+                }
+            }
+
         }
 
         binding.retryButton.setOnClickListener {

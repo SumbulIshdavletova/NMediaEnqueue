@@ -124,9 +124,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                // _data.postValue(FeedModel(error = true))
+       //         _data.postValue(_data.value?.copy(posts = old))
                 _data.postValue(FeedModel(removeError = true))
-                _data.postValue(_data.value?.copy(posts = old))
+
             }
         })
     }
