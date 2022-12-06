@@ -2,20 +2,24 @@ package ru.netology.nmedia.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.*
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.io.IOException
-import kotlin.concurrent.thread
+import ru.netology.nmedia.entity.Image
+
 
 private val empty = Post(
     id = 0,
     content = "",
     author = "",
+    authorAvatar = "",
     likedByMe = false,
     likes = 0,
-    published = ""
+    published = "",
+    attachment = Image(url = "", "", AttachmentType.IMAGE)
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,7 +38,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun loadPosts() {
-        repository.getAllAsync(object : PostRepository.GetAllCallback<List<Post>> {
+        repository.getAllAsync(object : PostRepository.Callback<List<Post>> {
             override fun onSuccess(value: List<Post>) {
                 _data.postValue(FeedModel(posts = value, empty = value.isEmpty()))
             }
@@ -47,13 +51,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            repository.saveAsync(it, object : PostRepository.GetAllCallback<Post> {
+            repository.saveAsync(it, object : PostRepository.Callback<Post> {
                 override fun onSuccess(value: Post) {
                     _postCreated.postValue(Unit)
                 }
 
                 override fun onError(e: Exception) {
-                    _data.postValue(FeedModel(error = true))
+                    _data.postValue(FeedModel(saveError = true))
+
                 }
             })
         }
@@ -73,7 +78,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        repository.likeByIdAsync(id, object : PostRepository.GetAllCallback<Post> {
+        repository.likeByIdAsync(id, object : PostRepository.Callback<Post> {
             override fun onSuccess(value: Post) {
                 _data.postValue(
                     _data.value?.copy(
@@ -84,15 +89,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.postValue(FeedModel(likeError = true))
             }
         })
-
-
     }
 
     fun unlikeById(id: Long) {
-        repository.unlikeByIdAsync(id, object : PostRepository.GetAllCallback<Post> {
+        repository.unlikeByIdAsync(id, object : PostRepository.Callback<Post> {
             override fun onSuccess(value: Post) {
                 _data.postValue(
                     _data.value?.copy(
@@ -103,15 +106,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _data.postValue(FeedModel(likeError = true))
             }
         })
     }
 
-
     fun removeById(id: Long) {
         val old = _data.value?.posts.orEmpty()
-        repository.removeByIdAsync(id, object : PostRepository.GetAllCallback<Unit> {
+        repository.removeByIdAsync(id, object : PostRepository.Callback<Unit> {
             override fun onSuccess(value: Unit) {
 
                 _data.postValue(
@@ -122,8 +124,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             override fun onError(e: Exception) {
-                // _data.postValue(FeedModel(error = true))
-                _data.postValue(_data.value?.copy(posts = old))
+       //         _data.postValue(_data.value?.copy(posts = old))
+                _data.postValue(FeedModel(removeError = true))
+
             }
         })
     }

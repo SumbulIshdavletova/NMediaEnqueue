@@ -1,14 +1,20 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -41,8 +47,30 @@ class PostViewHolder(
         binding.apply {
             author.text = post.author
             published.text = post.published
+            val name = post.authorAvatar
+            val url = "http://10.0.2.2:9999/avatars/${name}"
+            Glide.with(binding.avatar)
+                .load(url)
+                .transform(CircleCrop())
+                .placeholder(R.drawable.ic_baseline_rotate_right_24)
+                .error(R.drawable.ic_baseline_error_24)
+                .timeout(10_000)
+                .into(avatar)
+
+            attachment.isVisible = post.attachment!=null && post.attachment.url.isNotEmpty()
+
+            if (post.attachment!=null) {
+                val name2 = post.attachment.url
+                val url2 = "http://10.0.2.2:9999/images/${name2}"
+                Glide.with(binding.attachment)
+                    .load(url2)
+                    .placeholder(R.drawable.ic_baseline_rotate_right_24)
+                    .error(R.drawable.ic_baseline_error_24)
+                    .timeout(10_000)
+                    .into(binding.attachment)
+            }
+
             content.text = post.content
-            // в адаптере
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
 
@@ -79,6 +107,8 @@ class PostViewHolder(
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
+
+
         }
     }
 }
